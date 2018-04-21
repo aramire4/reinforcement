@@ -43,6 +43,7 @@ class QLearningAgent(ReinforcementAgent):
         ReinforcementAgent.__init__(self, **args)
 
         "*** YOUR CODE HERE ***"
+        self.values = util.Counter()
 
     def getQValue(self, state, action):
         """
@@ -51,6 +52,7 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
         "*** YOUR CODE HERE ***"
+        #return self.values[(state, action)]
         util.raiseNotDefined()
 
 
@@ -62,6 +64,15 @@ class QLearningAgent(ReinforcementAgent):
           terminal state, you should return a value of 0.0.
         """
         "*** YOUR CODE HERE ***"
+        """
+        legalActions = self.getLegalActions(state)
+        bstQ = -99999999999
+        if len(legalActions) == 0:
+            return 0
+        for act in legalActions:
+            bstQ = max(bstQ, self.getQValue(state, act))
+        return bstQ
+        """
         util.raiseNotDefined()
 
     def computeActionFromQValues(self, state):
@@ -71,6 +82,19 @@ class QLearningAgent(ReinforcementAgent):
           you should return None.
         """
         "*** YOUR CODE HERE ***"
+        """
+        legalActions = self.getLegalActions(state)
+        bstQ = -99999999999
+        action = 0
+        if len(legalActions) == 0:
+            return action
+        for legalAct in legalActions:
+            qVal = self.getQValue(state, legalAct)
+            if qVal > bstQ:
+                action = legalAction
+                bstQ = qVal
+        return action
+        """
         util.raiseNotDefined()
 
     def getAction(self, state):
@@ -102,7 +126,8 @@ class QLearningAgent(ReinforcementAgent):
           it will be called on your behalf
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        
+        #util.raiseNotDefined()
 
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)

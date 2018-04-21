@@ -22,6 +22,7 @@
 def question2():
     answerDiscount = 0.9
     answerNoise = 0.2
+    #change parameters so that they're optimal
     return answerDiscount, answerNoise
 
 def question3a():
