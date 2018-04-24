@@ -47,6 +47,21 @@ class ValueIterationAgent(ValueEstimationAgent):
         "*** YOUR CODE HERE ***"
         for i in range(iterations):
             oldVal = self.values.copy()
+            for state in mdp.getStates():
+                if(mdp.isTerminal(state)):
+                    self.values[state] = 0
+                    continue
+                maxu = None
+                for action in mdp.getPossibleActions(state):
+                    eu = 0
+                    for(sp, prob) in mdp.getTransitionStatesAndProbs(state, action):
+                        r = mdp.getReward(state, action, sp)
+                        r+= self.discount * oldVal[sp]
+                        eu += prob * r
+                    if (maxu is None or eu > maxu):
+                        maxu = eu
+                self.values[state] = maxu
+            """
             for s in mdp.getStates():
                 if(mdp.isTerminal(s)):
                     self.values[s] = 0
@@ -62,6 +77,7 @@ class ValueIterationAgent(ValueEstimationAgent):
                     if (maxu is None or eu > maxu):
                         maxu = eu
                 self.values[s] = maxu
+            """
     def getValue(self, state):
         """
           Return the value of the state (computed in __init__).
