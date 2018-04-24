@@ -61,23 +61,7 @@ class ValueIterationAgent(ValueEstimationAgent):
                     if (maxu is None or eu > maxu):
                         maxu = eu
                 self.values[state] = maxu
-            """
-            for s in mdp.getStates():
-                if(mdp.isTerminal(s)):
-                    self.values[s] = 0
-                    continue
-                maxu = None
-                for a in mdp.getPossibleActions(s):
-                    eu = 0
-                    for(sp, p) in mdp.getTransitionStatesAndProbs(s, a):
-                        r = mdp.getReward(s, a, sp)
 
-                        r+= self.discount * oldVal[sp]
-                        eu += p * r
-                    if (maxu is None or eu > maxu):
-                        maxu = eu
-                self.values[s] = maxu
-            """
     def getValue(self, state):
         """
           Return the value of the state (computed in __init__).
