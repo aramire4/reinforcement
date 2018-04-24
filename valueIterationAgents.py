@@ -17,14 +17,6 @@ import mdp, util
 from learningAgents import ValueEstimationAgent
 
 class ValueIterationAgent(ValueEstimationAgent):
-    """
-        * Please read learningAgents.py before reading this.*
-
-        A ValueIterationAgent takes a Markov decision process
-        (see mdp.py) on initialization and runs value iteration
-        for a given number of iterations using the supplied
-        discount factor.
-    """
     def __init__(self, mdp, discount = 0.9, iterations = 100):
         """
           Your value iteration agent should take an mdp on
@@ -43,25 +35,23 @@ class ValueIterationAgent(ValueEstimationAgent):
         self.iterations = iterations
         self.values = util.Counter() # A Counter is a dict with default 0
 
-        # Write value iteration code here
-        "*** YOUR CODE HERE ***"
         for i in range(iterations):
             oldVal = self.values.copy()
-            for s in mdp.getStates():
-                if(mdp.isTerminal(s)):
-                    self.values[s] = 0
+            for state in mdp.getStates():
+                if(mdp.isTerminal(state)):
+                    self.values[state] = 0
                     continue
                 maxu = None
-                for a in mdp.getPossibleActions(s):
+                for action in mdp.getPossibleActions(state):
                     eu = 0
-                    for(sp, p) in mdp.getTransitionStatesAndProbs(s, a):
-                        r = mdp.getReward(s, a, sp)
-
+                    for(sp, prob) in mdp.getTransitionStatesAndProbs(state, action):
+                        r = mdp.getReward(state, action, sp)
                         r+= self.discount * oldVal[sp]
-                        eu += p * r
+                        eu += prob * r
                     if (maxu is None or eu > maxu):
                         maxu = eu
-                self.values[s] = maxu
+                self.values[state] = maxu
+    
     def getValue(self, state):
         """
           Return the value of the state (computed in __init__).
@@ -79,7 +69,6 @@ class ValueIterationAgent(ValueEstimationAgent):
         for trans in transitions:
             qVal += trans[1]*(self.mdp.getReward(state, action, trans[0]) + self.discount*self.values[trans[0]])
         return qVal
-        #util.raiseNotDefined()
 
     def computeActionFromValues(self, state):
         """
@@ -102,7 +91,6 @@ class ValueIterationAgent(ValueEstimationAgent):
                     bstAction = action
                     bstVal = val
             return bstAction
-        #util.raiseNotDefined()
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)
