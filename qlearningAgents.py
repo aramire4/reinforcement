@@ -138,18 +138,15 @@ class QLearningAgent(ReinforcementAgent):
         self.values[ (state, action) ] = (1-a) * self.getQValue(state,action)+a*approximate
         """
         first = (1 - self.alpha) * self.getQValue(state, action)
+        sample = None
         if len(self.getLegalActions(nextState)) == 0:
             sample = reward
         else:
-            sample = reward + (self.discount * max([self.getQValue(nextState, next_action) for next_action in self.getLegalActions(nextState)]))
+            for nextAct in self.getLegalActions(nextState):
+                sample = reward + (self.discount * max([self.getQValue(nextState, nextAct)]))
         second = self.alpha * sample
         self.values[(state, action)] = first + second
         
-        #sample = reward + (self.discount * max([self.getQValue(nextState, next_action) for next_action in self.getLegalActions(nextState)]))
-        """
-        for nextAct in self.getLegalActions(nextState):
-            sample = reward + (self.discount * max([self.getQValue(nextState, nextAct)]))
-        """
         #util.raiseNotDefined()
 
     def getPolicy(self, state):
