@@ -87,11 +87,11 @@ class QLearningAgent(ReinforcementAgent):
         bstQ = -99999999999
         action = None
         if len(legalActions) == 0:
-            return action
+            return None
         for legalAct in legalActions:
             qVal = self.getQValue(state, legalAct)
             if qVal > bstQ or action is None:
-                action = legalActions
+                action = legalAct
                 bstQ = qVal
         return action
         
@@ -112,13 +112,10 @@ class QLearningAgent(ReinforcementAgent):
         #action = None
         legalActions = self.getLegalActions(state)
         "*** YOUR CODE HERE ***"
-        
         if util.flipCoin(self.epsilon):
             return random.choice(legalActions)
         else:
             return self.computeActionFromQValues(state)
-            #return self.getPolicy(state)
-        
         #util.raiseNotDefined()
 
 
@@ -140,10 +137,6 @@ class QLearningAgent(ReinforcementAgent):
             sample = reward + (self.discount * self.computeValueFromQValues(nextState))
         second = self.alpha * sample
         self.values[(state, action)] = first + second
-        """
-        for nextAct in self.getLegalActions(nextState):
-            sample = reward + (self.discount * max([self.getQValue(nextState, nextAct)]))
-        """
         #util.raiseNotDefined()
         
     def getPolicy(self, state):
