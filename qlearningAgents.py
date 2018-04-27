@@ -85,12 +85,12 @@ class QLearningAgent(ReinforcementAgent):
         
         legalActions = self.getLegalActions(state)
         bstQ = -99999999999
-        action = 0
+        action = None
         if len(legalActions) == 0:
             return action
         for legalAct in legalActions:
             qVal = self.getQValue(state, legalAct)
-            if qVal > bstQ:
+            if qVal > bstQ or action is None:
                 action = legalActions
                 bstQ = qVal
         return action
@@ -112,14 +112,14 @@ class QLearningAgent(ReinforcementAgent):
         #action = None
         legalActions = self.getLegalActions(state)
         "*** YOUR CODE HERE ***"
-
-        """
+        
         if util.flipCoin(self.epsilon):
             return random.choice(legalActions)
         else:
             return self.computeActionFromQValues(state)
-        """
-        util.raiseNotDefined()
+            #return self.getPolicy(state)
+        
+        #util.raiseNotDefined()
 
 
     def update(self, state, action, nextState, reward):
@@ -132,23 +132,20 @@ class QLearningAgent(ReinforcementAgent):
           it will be called on your behalf
         """
         "*** YOUR CODE HERE ***"
-        """
-        maxQk, a = self.computeValueFromQValues(nextState), self.alpha
-        approximate = reward + maxQk * self.discount
-        self.values[ (state, action) ] = (1-a) * self.getQValue(state,action)+a*approximate
-        """
         first = (1 - self.alpha) * self.getQValue(state, action)
-        sample = None
+        #sample = None
         if len(self.getLegalActions(nextState)) == 0:
             sample = reward
         else:
-            for nextAct in self.getLegalActions(nextState):
-                sample = reward + (self.discount * max([self.getQValue(nextState, nextAct)]))
+            sample = reward + (self.discount * self.computeValueFromQValues(nextState))
         second = self.alpha * sample
         self.values[(state, action)] = first + second
-        
+        """
+        for nextAct in self.getLegalActions(nextState):
+            sample = reward + (self.discount * max([self.getQValue(nextState, nextAct)]))
+        """
         #util.raiseNotDefined()
-
+        
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
 
